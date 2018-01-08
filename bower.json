@@ -1,0 +1,27 @@
+{
+  "name": "tasklist-java-angularjs",
+  "version": "0.0.0",
+  "authors": [
+    "Esteban"
+  ],
+  "description": "FS Test project",
+  "keywords": [],
+  "license": "Apache 2.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/main/webapp/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "1.6.7",
+    "angular-loader": "1.6.7",
+    "angular-mocks": "1.6.7",
+    "angular-route": "1.6.7",
+    "bootstrap": "3.3.7"
+  },
+  "main": "src/main/webapp/index.html"
+}

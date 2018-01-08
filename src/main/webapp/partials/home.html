@@ -1,0 +1,43 @@
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">TaskList App</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+            </ul>
+            <p class="navbar-text pull-right">
+                <button class="btn btn-xs btn-link" type="button" data-toggle="button"
+                        data-ng-click="toggleDebug()">Debug
+                </button>
+            </p>
+        </div>
+    </div>
+</div>
+<div class="container theme-showcase" role="main">
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="row">
+        <div class="col-md-8">
+
+            <h2 class="pull-left">{{title}}</h2>
+            <p class="pull-right">
+                <a href="#" class="btn btn-info btn-lg">
+                    <span class="glyphicon glyphicon-plus"></span> Add Task
+                </a>
+            </p>
+        </div>
+        <label>Search: <input ng-model="searchText"></label>
+        <div class="col-md-8">
+            <div class="taskradio">
+                <div class="taskradio-info" ng-repeat="task in data | orderBy:'-DueDate':true | filter:searchText">
+                    <input type="checkbox" name="checkbox" id="{{task.Id}}" ng-model="task.Completed" ng-click="markAsCompleted(task,$event)"/>
+                    <label for="{{task.Id}}">ID:{{task.Id}} - {{task.Name}} - Due Date: {{task.DueDate | date :  "yyyy-MM-dd"}}</label>
+                    <span class="glyphicon glyphicon-trash pull-right" style="font-size: 20px" ng-click="deleteTask(task.Id)"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- /container -->
+
+<pre data-ng-model="debug" data-ng-show="debug">{{ data | json }}</pre>
