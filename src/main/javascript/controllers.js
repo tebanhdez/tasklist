@@ -1,12 +1,12 @@
 var controllers = angular.module("controllers", []);
 
-controllers.controller("TaskController", ['$scope', '$http', 'TaskDataOp',function ($scope, $http, TaskDataOp) {
+controllers.controller("TaskController", ['$scope', 'TaskService',function ($scope, TaskService) {
 
     $scope.title = 'Pending tasks:';
     $scope.editTask = {'Name': '', 'DueDate': new Date()};
 
     $scope.getAllPendingTaskCall = function(){
-        TaskDataOp.getTasks().then(function (response) {
+        TaskService.getTasks().then(function (response) {
             $scope.data = response.data;
             console.log(response.data);
         }, function (response) {
@@ -41,7 +41,7 @@ controllers.controller("TaskController", ['$scope', '$http', 'TaskDataOp',functi
     };
 
     var deleteTaskCall = function(taskId){
-        TaskDataOp.deleteTask(taskId).then(function (response) {
+        TaskService.deleteTask(taskId).then(function (response) {
             $scope.getAllPendingTaskCall();
             $scope.editTask = {'Name': '', 'DueDate': new Date()};
         }, function (response) {
@@ -58,7 +58,7 @@ controllers.controller("TaskController", ['$scope', '$http', 'TaskDataOp',functi
 
     $scope.ok = function() {
         if($scope.editTask.Name && $scope.editTask.DueDate)
-            TaskDataOp.saveTaskCall($scope.editTask).then(function (response) {
+            TaskService.saveTaskCall($scope.editTask).then(function (response) {
                 $scope.getAllPendingTaskCall();
                 $scope.editTask = {'Name': '', 'DueDate': new Date()};
             }, function (response) {
