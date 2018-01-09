@@ -141,7 +141,7 @@
           </execution>
         </executions>
         <configuration>
-          <failOnWarning>true</failOnWarning>
+          <failOnWarning>false</failOnWarning>
           <!--<outputDirectory>src/main/webapp/js</outputDirectory>-->
           <outputDirectory>target/${artifact.name}/js</outputDirectory>
           <nosuffix>true</nosuffix>
@@ -193,6 +193,7 @@
             <source>${vendor.loc}/angular-route/angular-route.min.js</source>
             <source>${vendor.loc}/angular-mocks/angular-mocks.js</source>
           </preloadSources>
+          <haltOnFailure>false</haltOnFailure>
           <jsSrcDir>src/main/javascript</jsSrcDir>
           <jsTestSrcDir>src/test/javascript</jsTestSrcDir>
           <specIncludes>

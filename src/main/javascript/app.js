@@ -1,6 +1,6 @@
 var app = angular.module('app', [
    'ngRoute',
-   'controllers'
+   'controllers','ui.bootstrap.modal','TaskService'
 ]);
 
 app.config(['$routeProvider',

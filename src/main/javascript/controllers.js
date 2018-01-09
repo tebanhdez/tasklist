@@ -1,24 +1,30 @@
 var controllers = angular.module("controllers", []);
 
-controllers.controller("TaskController", ['$scope', '$http', function ($scope, $http) {
-    $scope.debug = false;
-    $scope.title = 'Pending tasks:';
+controllers.controller("TaskController", ['$scope', '$http', 'TaskDataOp',function ($scope, $http, TaskDataOp) {
 
-    $http.get("api/task").then(function (response) {
-        $scope.data = response.data;
-        console.log(response.data);
-    }, function (response) {
-        // called asynchronously if an error occurs
-        // or server returns response with an error status.
-        console.error(response);
-    });
+    $scope.title = 'Pending tasks:';
+    $scope.editTask = {'Name': '', 'DueDate': new Date()};
+
+    $scope.getAllPendingTaskCall = function(){
+        TaskDataOp.getTasks().then(function (response) {
+            $scope.data = response.data;
+            console.log(response.data);
+        }, function (response) {
+            console.error(response);
+        });
+    };
 
     $scope.markAsCompleted = function(task, e){
         var response = confirm("Do you want to mark the task as complete?");
         console.log("responded");
         if (response==true) {
-            console.log("Completing")
-            completeTaskCall(task);
+            console.log("Completing");
+            TaskDataOp.saveTaskCall(task).then(function (response) {
+                $scope.getAllPendingTaskCall();
+                $scope.editTask = {'Name': '', 'DueDate': new Date()};
+            }, function (response) {
+                console.error(response);
+            });
         }else{
             e.preventDefault();
         }
@@ -33,23 +39,37 @@ controllers.controller("TaskController", ['$scope', '$http', function ($scope, $
         }
 
     };
-    function completeTaskCall(task){
-        $http.put("api/task", task).then(function (response) {
-            console.log(response.data);
-        }, function (response) {
-            console.error(response);
-        });
-    };
 
     var deleteTaskCall = function(taskId){
-        $http['delete']('api/task/'+taskId).then(function (response) {
-            console.log(response);
+        TaskDataOp.deleteTask(taskId).then(function (response) {
+            $scope.getAllPendingTaskCall();
+            $scope.editTask = {'Name': '', 'DueDate': new Date()};
         }, function (response) {
             console.error(response);
         });
     };
-    $scope.toggleDebug = function () {
-        $scope.debug = !$scope.debug;
+
+/**/
+    $scope.open = function(task) {
+        if(task)
+            angular.copy(task, $scope.editTask);
+        $scope.showModal = true;
     };
 
+    $scope.ok = function() {
+        if($scope.editTask.Name && $scope.editTask.DueDate)
+            TaskDataOp.saveTaskCall($scope.editTask).then(function (response) {
+                $scope.getAllPendingTaskCall();
+                $scope.editTask = {'Name': '', 'DueDate': new Date()};
+            }, function (response) {
+                console.error(response);
+            });
+        $scope.showModal = false;
+    };
+
+    $scope.cancel = function() {
+        $scope.editTask = {'Name': '', 'DueDate': new Date()};
+        $scope.showModal = false;
+    };
+/**/
 }]);

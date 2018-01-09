@@ -7,32 +7,59 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
             </ul>
-            <p class="navbar-text pull-right">
-                <button class="btn btn-xs btn-link" type="button" data-toggle="button"
-                        data-ng-click="toggleDebug()">Debug
-                </button>
-            </p>
         </div>
     </div>
 </div>
-<div class="container theme-showcase" role="main">
-    <!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="container theme-showcase" role="main" ng-init="getAllPendingTaskCall()">
     <div class="row">
         <div class="col-md-8">
 
             <h2 class="pull-left">{{title}}</h2>
             <p class="pull-right">
-                <a href="#" class="btn btn-info btn-lg">
+                <button href="#" class="btn btn-info btn-lg" ng-click="open()">
                     <span class="glyphicon glyphicon-plus"></span> Add Task
-                </a>
+                </button>
             </p>
         </div>
+
+        <div class="modal" tabindex="-1" role="dialog" modal="showModal" close="cancel()">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Task Details:</h2>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group row">
+                                <label for="name" class="col-sm-2 col-form-label">Name:</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control-plaintext" id="name" ng-model="editTask.Name" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="duedate" class="col-sm-2 col-form-label">Due Date:</label>
+                                <div class="col-sm-6">
+                                    <input class="form-control" type="date" id="duedate" name="input" ng-model="editTask.DueDate"
+                                           placeholder="yyyy-MM-dd" data-date-format="yyyy-MM-dd" required />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" ng-click="ok()">Okay</button>
+                        <button class="btn" ng-click="cancel()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <label>Search: <input ng-model="searchText"></label>
         <div class="col-md-8">
             <div class="taskradio">
                 <div class="taskradio-info" ng-repeat="task in data | orderBy:'-DueDate':true | filter:searchText">
                     <input type="checkbox" name="checkbox" id="{{task.Id}}" ng-model="task.Completed" ng-click="markAsCompleted(task,$event)"/>
                     <label for="{{task.Id}}">ID:{{task.Id}} - {{task.Name}} - Due Date: {{task.DueDate | date :  "yyyy-MM-dd"}}</label>
+                    <span class="glyphicon glyphicon-pencil" style="font-size: 20px; margin-left: 15px;" ng-click="open(task)"></span>
                     <span class="glyphicon glyphicon-trash pull-right" style="font-size: 20px" ng-click="deleteTask(task.Id)"></span>
                 </div>
             </div>
@@ -40,4 +67,3 @@
     </div>
 </div> <!-- /container -->
 
-<pre data-ng-model="debug" data-ng-show="debug">{{ data | json }}</pre>
